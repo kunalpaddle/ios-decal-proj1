@@ -8,14 +8,22 @@
 
 import UIKit
 
+protocol ToDoListItemDelegate {
+    func deleteToDoListItem(toDoListItem: ToDoListItem)
+    func completeToDoListItem(toDoListItem: ToDoListItem)
+}
+
 class ToDoListCell: UITableViewCell {
     var shouldDeleteCell = false
+    var shouldMarkComplete = false
     var origin = CGPoint()
+    var toDoListItem : ToDoListItem?
+    var delegate: ToDoListItemDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        var panRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan: ")
+
+        var panRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         panRecognizer.delegate = self
         addGestureRecognizer(panRecognizer)
         
@@ -23,7 +31,7 @@ class ToDoListCell: UITableViewCell {
     
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder: NSCoder) has not been implemented")
     }
 
 
@@ -38,29 +46,43 @@ class ToDoListCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func handlePan(panRecognizer: UIPanGestureRecognizer) {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
+    func handlePan(recognizer: UIPanGestureRecognizer) {
         //Find the center
-        if panRecognizer.state == .Began{
+        if recognizer.state == .Began{
             origin = center
         }
         
-        if panRecognizer.state == .Changed{
+        if recognizer.state == .Changed{
             // How far did we move in the X-direction?
-            let translation = panRecognizer.translationInView(self)
+            let translation = recognizer.translationInView(self)
             center = CGPointMake(origin.x + translation.x, origin.y)
-            shouldDeleteCell = frame.origin.x < -1*frame.size.width / 2
+            shouldDeleteCell = frame.origin.x < -1*frame.size.width / 2.2
+            shouldMarkComplete = frame.origin.x > frame.size.width / 2.2
+            
+            
             
         }
         
-        if panRecognizer.state == .Ended {
+        if recognizer.state == .Ended {
             
             let originalCell = CGRect(x: 0, y: frame.origin.y, width: bounds.size.width, height: bounds.size.height)
             
             //If we don't drag the cell to the right threshold X, return it to original position.
-            if !shouldDeleteCell{
+            if !shouldDeleteCell && !shouldMarkComplete{
                 UIView.animateWithDuration(0.3, animations: {self.frame = originalCell})
             }
-        
+            
+            if(shouldDeleteCell && delegate != nil && toDoListItem != nil){
+                delegate!.deleteToDoListItem(toDoListItem!)
+            }
+            
+            if(shouldMarkComplete && delegate != nil && toDoListItem != nil){
+                delegate!.completeToDoListItem(toDoListItem!)
+            }
             
         }
     }
