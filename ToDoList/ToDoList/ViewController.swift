@@ -103,7 +103,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell.textLabel?.backgroundColor = UIColor.clearColor()
             cell.selectionStyle = .None
             let item = toDoListItems[indexPath.row]
-//            cell.textLabel?.textColor = UIColor.whiteColor()
             cell.delegate = self
             cell.toDoListItem = item
             cell.textLabel?.attributedText = item.task
@@ -121,7 +120,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         toDoList.beginUpdates()
         let indexPath = NSIndexPath(forRow: indexOfItem, inSection: 0)
-        toDoList.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        toDoList.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
         toDoList.endUpdates()
         
     }
@@ -146,7 +145,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         toDoList.beginUpdates()
         let indexPath = NSIndexPath(forRow: indexOfItem, inSection: 0)
-        toDoList.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        toDoList.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
         toDoList.endUpdates()
         
     }
