@@ -291,7 +291,7 @@
                                 <segue destination="Uze-V8-4GU" kind="unwind" unwindAction="unwindToList:" id="Ysk-23-lO4"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="JcN-UC-vct">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="JcN-UC-vct">
                             <connections>
                                 <segue destination="Uze-V8-4GU" kind="unwind" unwindAction="unwindAndAddToList:" id="lTJ-8W-Z4j"/>
                             </connections>
